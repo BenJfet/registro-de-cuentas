@@ -1,0 +1,20 @@
+# Despliegue en Render (Blueprint). La base de datos vive en Neon.
+services:
+  - type: web
+    name: caja-del-dia
+    runtime: node
+    plan: free
+    region: virginia
+    # El esquema es idempotente: migrar en cada build es seguro.
+    buildCommand: npm ci --include=dev && npm run build && npm run db:migrate
+    startCommand: npm start
+    healthCheckPath: /api/salud
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: "22"
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false # se pega a mano en Render (cadena de conexión de Neon)

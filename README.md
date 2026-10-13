@@ -16,6 +16,7 @@ Aplicación web para registrar las ventas diarias y cuadrar la caja de un negoci
 - **Totales en vivo** mientras se escribe, y aviso de cambios sin guardar.
 - **Historial mensual** con días registrados, ventas del mes, ingreso total y promedio por día. Cualquier día se puede abrir y corregir.
 - **Diseño adaptable** al celular, con los colores del restaurante (crema, guinda y blanco).
+- **Instalable como app (PWA)** en Android e iPhone: ícono en la pantalla de inicio y pantalla completa, sin pasar por las tiendas de apps.
 
 <p align="center">
   <img src="docs/historial.png" alt="Historial mensual" width="560">
@@ -66,6 +67,10 @@ npm run dev
 
 Abre http://localhost:5173, crea una cuenta y empieza a registrar.
 
+### Despliegue
+
+La app está preparada para **Render** (servidor) y **Neon** (PostgreSQL), con la configuración en [`render.yaml`](render.yaml). En producción, Express sirve la API y la web compilada desde el mismo dominio, y `/api/salud` sirve de *health check*.
+
 ### Scripts
 
 | Comando | Descripción |
@@ -108,7 +113,6 @@ Todas las rutas de `/api/registros` requieren sesión.
 ## Próximos pasos
 
 - [ ] Publicar una demo en línea
-- [ ] Instalable en el celular (PWA)
 - [ ] Exportar el historial a Excel o PDF
 - [ ] Gráficos de ventas por semana y por mes
 
