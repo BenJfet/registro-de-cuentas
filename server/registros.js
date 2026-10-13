@@ -42,6 +42,60 @@ rutasRegistros.get('/', async (req, res) => {
   res.json({ registros: rows });
 });
 
+// Totales por semana o por mes para los gráficos. Incluye periodos sin registros (en 0).
+// "hasta" lo manda el cliente: es su fecha local (el servidor está en UTC).
+const esquemaResumen = z.object({
+  periodo: z.enum(['semana', 'mes']),
+  cantidad: z.coerce.number().int().min(1).max(60).default(12),
+  hasta: esquemaFecha,
+});
+
+rutasRegistros.get('/resumen', async (req, res) => {
+  const datos = esquemaResumen.safeParse(req.query);
+  if (!datos.success) return res.status(400).json({ error: datos.error.issues[0].message });
+
+  const { periodo, cantidad, hasta } = datos.data;
+  const unidad = periodo === 'semana' ? 'week' : 'month';
+  const { rows } = await pool.query(
+    `WITH periodos AS (
+       SELECT generate_series(
+                date_trunc($2, $3::date::timestamp) - ($4 - 1) * $5::interval,
+                date_trunc($2, $3::date::timestamp),
+                $5::interval
+              )::date AS inicio
+     )
+     SELECT p.inicio,
+            COALESCE(SUM(r.suma_ventas), 0)   AS ventas,
+            COALESCE(SUM(r.ingreso_total), 0) AS ingreso,
+            COUNT(r.id)::int                  AS dias
+       FROM periodos p
+       LEFT JOIN registros_diarios r
+              ON r.usuario_id = $1
+             AND r.fecha >= p.inicio
+             AND r.fecha <  p.inicio + $5::interval
+      GROUP BY p.inicio
+      ORDER BY p.inicio`,
+    [req.usuarioId, unidad, hasta, cantidad, `1 ${unidad}`],
+  );
+  res.json({ periodos: rows });
+});
+
+// Todos los campos, para exportar a Excel/PDF. Sin "mes" exporta todo el historial.
+rutasRegistros.get('/exportar', async (req, res) => {
+  const filtrarMes = req.query.mes !== undefined;
+  const mes = esquemaMes.safeParse(req.query.mes);
+  if (filtrarMes && !mes.success) return res.status(400).json({ error: mes.error.issues[0].message });
+
+  const { rows } = await pool.query(
+    `SELECT * FROM registros_diarios
+      WHERE usuario_id = $1
+        AND ($2::date IS NULL OR (fecha >= $2::date AND fecha < ($2::date + INTERVAL '1 month')))
+      ORDER BY fecha`,
+    [req.usuarioId, filtrarMes ? `${mes.data}-01` : null],
+  );
+  res.json({ registros: rows });
+});
+
 // Registro de un día + datos del día anterior para autocompletar.
 rutasRegistros.get('/:fecha', async (req, res) => {
   const fecha = esquemaFecha.safeParse(req.params.fecha);

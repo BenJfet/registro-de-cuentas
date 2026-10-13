@@ -6,6 +6,7 @@ import Layout from './componentes/Layout.jsx';
 import Acceso from './paginas/Acceso.jsx';
 import Dia from './paginas/Dia.jsx';
 import Historial from './paginas/Historial.jsx';
+import Graficos from './paginas/Graficos.jsx';
 import './estilos.css';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
       <Route element={usuario ? <Layout /> : <Navigate to="/acceso" replace />}>
         <Route index element={<Dia />} />
         <Route path="historial" element={<Historial />} />
+        <Route path="graficos" element={<Graficos />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

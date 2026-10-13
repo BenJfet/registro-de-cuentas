@@ -3,12 +3,40 @@ import { Link } from 'react-router-dom';
 import { api } from '../api.js';
 import { redondear } from '../../../shared/calculos.js';
 import { fechaCorta, hoy, nombreMes, soles } from '../formato.js';
+import { useSesion } from '../sesion.jsx';
 
 export default function Historial() {
+  const { usuario } = useSesion();
   const [mes, setMes] = useState(() => hoy().slice(0, 7));
   const [registros, setRegistros] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState('');
+  const [exportando, setExportando] = useState('');
+
+  const exportar = async (formato, todo = false) => {
+    setExportando(todo ? 'todo' : formato);
+    setError('');
+    try {
+      const { registros: filas } = await api(todo ? '/registros/exportar' : `/registros/exportar?mes=${mes}`);
+      if (!filas.length) throw new Error('No hay registros para exportar');
+      const periodo = todo ? 'todo el historial' : nombreMes(mes);
+      const archivo = `caja-del-dia-${todo ? 'historial-completo' : mes}`;
+      const { exportarExcel, exportarPdf } = await import('../exportar.js');
+      if (formato === 'excel') {
+        await exportarExcel(filas, { titulo: `Caja del Día · ${periodo}`, archivo: `${archivo}.xlsx` });
+      } else {
+        await exportarPdf(filas, {
+          titulo: `Caja del Día · ${periodo.charAt(0).toUpperCase()}${periodo.slice(1)}`,
+          subtitulo: `${usuario.nombre} · ${filas.length} días registrados · generado el ${new Date().toLocaleDateString('es-PE')}`,
+          archivo: `${archivo}.pdf`,
+        });
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setExportando('');
+    }
+  };
 
   useEffect(() => {
     if (!mes) return;
@@ -56,6 +84,22 @@ export default function Historial() {
           <span>Promedio por día</span>
           <strong>{soles(promedio)}</strong>
         </div>
+      </div>
+
+      <div className="exportar">
+        <span className="exportar-etiqueta">Descargar {mes ? nombreMes(mes) : 'mes'}</span>
+        <button type="button" className="boton-secundario" onClick={() => exportar('excel')}
+          disabled={!!exportando || !registros.length}>
+          {exportando === 'excel' ? 'Generando…' : 'Excel'}
+        </button>
+        <button type="button" className="boton-secundario" onClick={() => exportar('pdf')}
+          disabled={!!exportando || !registros.length}>
+          {exportando === 'pdf' ? 'Generando…' : 'PDF'}
+        </button>
+        <button type="button" className="boton-texto exportar-todo" onClick={() => exportar('excel', true)}
+          disabled={!!exportando}>
+          {exportando === 'todo' ? 'Generando…' : 'Copia de seguridad: todo el historial en Excel'}
+        </button>
       </div>
 
       {error && <p className="alerta" role="alert">{error}</p>}

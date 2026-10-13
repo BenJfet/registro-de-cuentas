@@ -17,8 +17,14 @@ Aplicación web para registrar las ventas diarias y cuadrar la caja de un negoci
   3. **Ingresos**: duro, tarjeta y Yape. El **ingreso Yape** es el Yape del día menos el Yape anterior (se autocompleta y se puede corregir si se gastó dinero de ahí). El **ingreso total** es sencillo + duro + tarjeta + ingreso Yape.
 - **Totales en vivo** mientras se escribe, y aviso de cambios sin guardar.
 - **Historial mensual** con días registrados, ventas del mes, ingreso total y promedio por día. Cualquier día se puede abrir y corregir.
+- **Exportación a Excel y PDF** del mes, y una copia de seguridad de todo el historial en Excel. El Excel trae fórmulas de totales y formato de soles; el PDF es un reporte listo para imprimir.
+- **Gráficos de ventas por semana y por mes** (últimos 12 periodos), con detalle al tocar cada barra y una vista en tabla accesible. Los totales se agregan en PostgreSQL con `generate_series`, así que los periodos sin ventas aparecen en 0.
 - **Diseño adaptable** al celular, con los colores del restaurante (crema, guinda y blanco).
 - **Instalable como app (PWA)** en Android e iPhone: ícono en la pantalla de inicio y pantalla completa, sin pasar por las tiendas de apps.
+
+<p align="center">
+  <img src="docs/graficos.png" alt="Gráficos de ventas por semana y por mes" width="760">
+</p>
 
 <p align="center">
   <img src="docs/historial.png" alt="Historial mensual" width="560">
@@ -30,7 +36,8 @@ Aplicación web para registrar las ventas diarias y cuadrar la caja de un negoci
 
 | Capa | Tecnología |
 |---|---|
-| Frontend | React 19, React Router, Vite |
+| Frontend | React 19, React Router, Vite, gráficos en SVG propio |
+| Reportes | ExcelJS, jsPDF (cargados bajo demanda) |
 | Backend | Node.js, Express 5 |
 | Base de datos | PostgreSQL 16 |
 | Seguridad | bcrypt, JWT en cookie httpOnly, Helmet, rate limiting en el login, validación con Zod |
@@ -94,6 +101,8 @@ Todas las rutas de `/api/registros` requieren sesión.
 | `POST` | `/api/auth/logout` | Cerrar sesión |
 | `GET` | `/api/auth/yo` | Usuario actual |
 | `GET` | `/api/registros?mes=AAAA-MM` | Registros de un mes |
+| `GET` | `/api/registros/resumen?periodo=semana\|mes&cantidad=12&hasta=AAAA-MM-DD` | Totales por semana o por mes |
+| `GET` | `/api/registros/exportar[?mes=AAAA-MM]` | Todos los campos, de un mes o de todo el historial |
 | `GET` | `/api/registros/:fecha` | Registro de un día y datos del día anterior para autocompletar |
 | `PUT` | `/api/registros/:fecha` | Crear o actualizar el registro del día |
 | `DELETE` | `/api/registros/:fecha` | Eliminar el registro del día |
@@ -103,19 +112,15 @@ Todas las rutas de `/api/registros` requieren sesión.
 ```
 ├── client/            Frontend React (Vite)
 │   └── src/
-│       ├── paginas/       Acceso, Día, Historial
-│       └── componentes/   Layout, Campo
+│       ├── paginas/       Acceso, Día, Historial, Gráficos
+│       ├── componentes/   Layout, Campo, GraficoBarras
+│       └── exportar.js    Excel y PDF
 ├── server/            API Express
 │   ├── auth.js            Registro, login y sesión
 │   ├── registros.js       CRUD de registros diarios
 │   └── db/                Conexión, esquema SQL y migración
 └── shared/            Lógica de cálculo compartida + pruebas
 ```
-
-## Próximos pasos
-
-- [ ] Exportar el historial a Excel o PDF
-- [ ] Gráficos de ventas por semana y por mes
 
 ---
 

@@ -11,5 +11,7 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     emptyOutDir: true,
+    // ExcelJS pesa ~900 kB, pero se carga solo al exportar (import dinámico).
+    chunkSizeWarningLimit: 1000,
   },
 });

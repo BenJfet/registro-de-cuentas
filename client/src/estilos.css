@@ -260,6 +260,71 @@ button, input { font: inherit; color: inherit; }
 
 .vacio { display: grid; justify-items: center; gap: 16px; padding: 40px 16px; color: var(--texto-suave); }
 
+.boton-secundario {
+  min-height: 40px; padding: 0 16px;
+  border: 1px solid var(--acento); border-radius: 10px;
+  background: var(--superficie); color: var(--acento);
+  font-weight: 600; cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+.boton-secundario:hover:not(:disabled) { background: var(--acento-suave); }
+.boton-secundario:disabled, .boton-texto:disabled { opacity: 0.5; cursor: default; text-decoration: none; }
+
+.exportar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; margin-bottom: 16px; }
+.exportar-etiqueta { font-size: 0.9rem; color: var(--texto-suave); }
+.exportar-etiqueta::first-letter { text-transform: uppercase; }
+.exportar-todo { margin-left: auto; font-size: 0.88rem; }
+
+/* ---------- Gráficos ---------- */
+.segmentado {
+  display: inline-flex; padding: 3px; gap: 2px;
+  background: var(--superficie); border: 1px solid var(--borde); border-radius: 10px;
+}
+.segmentado button {
+  min-height: 36px; padding: 0 14px; border: 0; border-radius: 8px;
+  background: none; color: var(--texto-suave); font-weight: 500; cursor: pointer;
+}
+.segmentado button[aria-pressed='true'] { background: var(--acento); color: var(--sobre-acento); }
+
+.rejilla-graficos {
+  display: grid; gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr));
+  transition: opacity 0.2s ease;
+}
+.tarjeta-grafico h2 { display: block; }
+.grafico-sub { font-size: 0.85rem; color: var(--texto-suave); margin-top: 2px; }
+
+.grafico-cifras { display: flex; flex-wrap: wrap; gap: 8px 28px; }
+.grafico-cifras div { display: grid; }
+.grafico-cifras span { font-size: 0.82rem; color: var(--texto-suave); }
+.grafico-cifras strong { font-size: 1.3rem; }
+
+.grafico { --barra: #9c2a3c; position: relative; min-width: 0; }
+.grafico svg { display: block; overflow: visible; }
+.grafico-rejilla { stroke: var(--borde); stroke-width: 1; }
+.grafico-base { stroke: #cdbfa6; stroke-width: 1; }
+.grafico-eje { fill: var(--texto-suave); font-size: 11px; font-variant-numeric: tabular-nums; }
+.grafico-valor { fill: var(--texto); font-size: 11px; font-weight: 600; }
+.grafico-barra { fill: var(--barra); }
+.grafico-barra-curso { fill: var(--barra); fill-opacity: 0.4; }
+.grafico-foco { fill: var(--fondo); fill-opacity: 0.7; }
+.grafico-zona { cursor: pointer; outline: none; }
+.grafico-zona:focus-visible { stroke: var(--acento); stroke-width: 2; }
+
+.grafico-tooltip {
+  position: absolute; z-index: 2; transform: translate(-50%, -100%);
+  display: grid; gap: 1px; min-width: 150px; padding: 8px 12px;
+  background: var(--texto); color: var(--crema);
+  border-radius: 10px; box-shadow: 0 4px 16px rgb(60 20 25 / 0.2);
+  font-size: 0.8rem; pointer-events: none; white-space: nowrap;
+}
+.grafico-tooltip strong { font-size: 1rem; color: var(--blanco); }
+.grafico-tooltip-titulo { opacity: 0.85; }
+
+.grafico-tabla summary { cursor: pointer; color: var(--acento); font-weight: 600; font-size: 0.9rem; }
+.grafico-tabla .tabla { margin-top: 8px; }
+.tarjeta-grafico .vacio { padding: 32px 0; }
+
 /* ---------- Celular ---------- */
 @media (max-width: 600px) {
   .cabecera-interior { gap: 8px; }
@@ -272,6 +337,8 @@ button, input { font: inherit; color: inherit; }
   .col-opcional { display: none; }
   .tabla th, .tabla td { padding: 12px; }
   .estado { font-size: 0.8rem; }
+  .nav a { padding: 6px 9px; }
+  .exportar-todo { margin-left: 0; width: 100%; text-align: left; }
 }
 
 @media (prefers-reduced-motion: reduce) {

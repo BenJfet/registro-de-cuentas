@@ -15,6 +15,7 @@ export default function Layout() {
           <nav className="nav">
             <NavLink to="/" end>Día</NavLink>
             <NavLink to="/historial">Historial</NavLink>
+            <NavLink to="/graficos">Gráficos</NavLink>
           </nav>
           <div className="usuario">
             <span className="usuario-nombre">{usuario.nombre}</span>
