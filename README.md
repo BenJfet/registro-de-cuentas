@@ -1,5 +1,7 @@
 # Caja del Día
 
+**[Ver demo en línea →](https://caja-del-dia.onrender.com)** *(plan gratuito: si estuvo inactiva, la primera carga tarda alrededor de un minuto)*
+
 Aplicación web para registrar las ventas diarias y cuadrar la caja de un negocio de comida. Reemplaza el cuaderno donde se anotaban a mano los menús, combos, el sencillo, el efectivo, la tarjeta y Yape: los totales se calculan solos y cada día queda guardado en una base de datos con su historial.
 
 <p align="center">
@@ -112,7 +114,6 @@ Todas las rutas de `/api/registros` requieren sesión.
 
 ## Próximos pasos
 
-- [ ] Publicar una demo en línea
 - [ ] Exportar el historial a Excel o PDF
 - [ ] Gráficos de ventas por semana y por mes
 
