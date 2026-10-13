@@ -1,0 +1,36 @@
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { ProveedorSesion, useSesion } from './sesion.jsx';
+import Layout from './componentes/Layout.jsx';
+import Acceso from './paginas/Acceso.jsx';
+import Dia from './paginas/Dia.jsx';
+import Historial from './paginas/Historial.jsx';
+import './estilos.css';
+
+function App() {
+  const { usuario } = useSesion();
+
+  if (usuario === undefined) return <div className="cargando-pantalla">Cargando…</div>;
+
+  return (
+    <Routes>
+      <Route path="/acceso" element={usuario ? <Navigate to="/" replace /> : <Acceso />} />
+      <Route element={usuario ? <Layout /> : <Navigate to="/acceso" replace />}>
+        <Route index element={<Dia />} />
+        <Route path="historial" element={<Historial />} />
+      </Route>
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
+}
+
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    <BrowserRouter>
+      <ProveedorSesion>
+        <App />
+      </ProveedorSesion>
+    </BrowserRouter>
+  </StrictMode>,
+);

@@ -1,0 +1,19 @@
+# Secretos: NUNCA subir
+.env
+.env.*
+!.env.example
+
+# Dependencias y builds
+node_modules/
+client/dist/
+
+# Respaldos de base de datos
+*.sql.gz
+*.dump
+backups/
+
+# Sistema / editor
+.DS_Store
+Thumbs.db
+.vscode/
+*.log
