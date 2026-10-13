@@ -10,12 +10,12 @@ Aplicación web para registrar las ventas diarias y cuadrar la caja de un negoci
 
 - **Cuentas de usuario** con registro e inicio de sesión. Las contraseñas se guardan con hash bcrypt y la sesión va en una cookie `httpOnly`.
 - **Registro del día en tres apartados**:
-  1. **Ventas**: menús y combos (cantidad y total), extra y gaseosa, con la suma automática. Además, el sencillo del día anterior (se autocompleta) y el sencillo agregado.
+  1. **Ventas**: menús y combos (cantidad y total), extra y gaseosa, con la suma automática. Además, el sencillo del día anterior (se autocompleta) y el sencillo agregado. Al final aparece el **total de ventas + sencillo**, que se compara con el ingreso total para saber si la caja cuadra.
   2. **Sencillo**: cuatro montos que se suman.
   3. **Ingresos**: duro, tarjeta y Yape. El **ingreso Yape** es el Yape del día menos el Yape anterior (se autocompleta y se puede corregir si se gastó dinero de ahí). El **ingreso total** es sencillo + duro + tarjeta + ingreso Yape.
 - **Totales en vivo** mientras se escribe, y aviso de cambios sin guardar.
 - **Historial mensual** con días registrados, ventas del mes, ingreso total y promedio por día. Cualquier día se puede abrir y corregir.
-- **Diseño adaptable** al celular y con modo oscuro automático.
+- **Diseño adaptable** al celular, con los colores del restaurante (crema, guinda y blanco).
 
 <p align="center">
   <img src="docs/historial.png" alt="Historial mensual" width="560">

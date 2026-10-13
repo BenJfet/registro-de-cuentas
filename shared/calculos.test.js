@@ -12,6 +12,12 @@ test('sencillo inicial = sencillo del día anterior + sencillo agregado', () => 
   assert.equal(t.sencilloInicial, 70);
 });
 
+test('total ventas + sencillo = suma de ventas + sencillo anterior + agregado', () => {
+  const base = { menu_total: 150, combo_total: 80, extra_total: 10, gaseosa_total: 20, sencillo_anterior: 50 };
+  assert.equal(calcularTotales(base).totalVentasSencillo, 310);
+  assert.equal(calcularTotales({ ...base, sencillo_agregado: 15 }).totalVentasSencillo, 325);
+});
+
 test('suma de sencillo junta los cuatro apartados', () => {
   const t = calcularTotales({ sencillo_1: 10, sencillo_2: 20.5, sencillo_3: 5, sencillo_4: 4.5 });
   assert.equal(t.sumaSencillo, 40);

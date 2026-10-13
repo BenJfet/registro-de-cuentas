@@ -1,41 +1,26 @@
+/* Colores del restaurante: crema, guinda y blanco. */
 :root {
-  --fondo: #f6f4ef;
-  --superficie: #ffffff;
-  --superficie-2: #f1efe9;
-  --borde: #e2ded4;
-  --texto: #1d1c19;
-  --texto-suave: #6b675e;
-  --acento: #0f6e4f;
-  --acento-fuerte: #0a573e;
-  --acento-suave: #e3f1ea;
-  --sobre-acento: #ffffff;
+  --crema: #f5ecdc;
+  --guinda: #7b1e2e;
+  --blanco: #ffffff;
+
+  --fondo: var(--crema);
+  --superficie: var(--blanco);
+  --superficie-2: #faf5ec;
+  --borde: #e8dcc6;
+  --texto: #2b1a1c;
+  --texto-suave: #6f5c57;
+  --acento: var(--guinda);
+  --acento-fuerte: #5e1421;
+  --acento-suave: #f6e6e3;
+  --sobre-acento: var(--blanco);
   --peligro: #b3261e;
   --peligro-suave: #fbe9e7;
   --aviso: #8a5a00;
-  --sombra: 0 1px 2px rgb(30 25 15 / 0.05), 0 4px 16px rgb(30 25 15 / 0.05);
+  --sombra: 0 1px 2px rgb(60 20 25 / 0.05), 0 4px 16px rgb(60 20 25 / 0.06);
   --radio: 14px;
   --fuente: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   color-scheme: light;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --fondo: #121412;
-    --superficie: #1b1e1b;
-    --superficie-2: #232723;
-    --borde: #2f342f;
-    --texto: #ecebe6;
-    --texto-suave: #a3a69f;
-    --acento: #3fbf8c;
-    --acento-fuerte: #5fd3a3;
-    --acento-suave: #173328;
-    --sobre-acento: #06251a;
-    --peligro: #ff8a80;
-    --peligro-suave: #3a1d1b;
-    --aviso: #f0b450;
-    --sombra: none;
-    color-scheme: dark;
-  }
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -91,9 +76,8 @@ button, input { font: inherit; color: inherit; }
 
 .cabecera {
   position: sticky; top: 0; z-index: 10;
-  background: color-mix(in srgb, var(--fondo) 88%, transparent);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--borde);
+  background: var(--guinda);
+  color: var(--blanco);
 }
 .cabecera-interior {
   display: flex; align-items: center; gap: 16px;
@@ -101,14 +85,17 @@ button, input { font: inherit; color: inherit; }
 }
 .marca { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -0.01em; }
 .nav { display: flex; gap: 4px; margin-left: auto; }
+.marca img { border-radius: 7px; box-shadow: 0 0 0 1.5px rgb(255 255 255 / 0.4); }
 .nav a {
   padding: 6px 12px; border-radius: 8px;
-  color: var(--texto-suave); text-decoration: none; font-weight: 500;
+  color: rgb(255 255 255 / 0.75); text-decoration: none; font-weight: 500;
 }
-.nav a:hover { color: var(--texto); }
-.nav a.active { background: var(--acento-suave); color: var(--acento); }
+.nav a:hover { color: var(--blanco); }
+.nav a.active { background: rgb(255 255 255 / 0.16); color: var(--blanco); }
 .usuario { display: flex; align-items: center; gap: 12px; }
-.usuario-nombre { color: var(--texto-suave); font-size: 0.9rem; }
+.usuario-nombre { color: rgb(255 255 255 / 0.75); font-size: 0.9rem; }
+.cabecera .boton-texto { color: var(--crema); }
+.cabecera :focus-visible { outline-color: var(--crema); }
 
 .contenido { max-width: 1100px; margin: 0 auto; padding: 24px 16px 120px; }
 
@@ -216,6 +203,11 @@ button, input { font: inherit; color: inherit; }
 .total-destacado { background: var(--acento-suave); }
 .total-destacado span { color: var(--acento); font-weight: 600; }
 .total-destacado output { color: var(--acento); font-size: 1.15rem; font-weight: 700; }
+
+.cuadre { font-size: 0.85rem; font-weight: 500; margin-top: -6px; }
+.cuadre-ok { color: var(--acento); }
+.cuadre-ok::before { content: '✓ '; }
+.cuadre-diferencia { color: var(--aviso); }
 
 .formula { font-size: 0.8rem; color: var(--texto-suave); margin-bottom: -6px; }
 

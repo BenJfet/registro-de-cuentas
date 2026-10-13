@@ -35,9 +35,11 @@ const sumar = (...valores) => redondear(valores.reduce((acc, v) => acc + num(v),
 export function calcularTotales(r) {
   const sumaVentas = sumar(r.menu_total, r.combo_total, r.extra_total, r.gaseosa_total);
   const sencilloInicial = sumar(r.sencillo_anterior, r.sencillo_agregado);
+  // Lo que debería haber en caja: debe concordar con el ingreso total.
+  const totalVentasSencillo = sumar(sumaVentas, sencilloInicial);
   const sumaSencillo = sumar(r.sencillo_1, r.sencillo_2, r.sencillo_3, r.sencillo_4);
   const ingresoYape = redondear(num(r.yape) - num(r.yape_anterior));
   const ingresoTotal = sumar(sumaSencillo, r.duro, r.tarjeta, ingresoYape);
 
-  return { sumaVentas, sencilloInicial, sumaSencillo, ingresoYape, ingresoTotal };
+  return { sumaVentas, sencilloInicial, totalVentasSencillo, sumaSencillo, ingresoYape, ingresoTotal };
 }

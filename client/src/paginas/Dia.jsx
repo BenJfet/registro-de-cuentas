@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { api } from '../api.js';
-import { CAMPOS, calcularTotales } from '../../../shared/calculos.js';
+import { CAMPOS, calcularTotales, redondear } from '../../../shared/calculos.js';
 import { fechaCorta, fechaLarga, hoy, soles } from '../formato.js';
 import Campo from '../componentes/Campo.jsx';
 
@@ -25,6 +25,20 @@ function Total({ etiqueta, valor, destacado = false }) {
       <span>{etiqueta}</span>
       <output>{soles(valor)}</output>
     </div>
+  );
+}
+
+// Compara el total de ventas + sencillo con el ingreso total.
+function Cuadre({ esperado, ingreso }) {
+  const diferencia = redondear(ingreso - esperado);
+  if (esperado === 0 && ingreso === 0) return null;
+  if (diferencia === 0) {
+    return <p className="cuadre cuadre-ok">Coincide con el ingreso total</p>;
+  }
+  return (
+    <p className="cuadre cuadre-diferencia">
+      {diferencia > 0 ? 'Sobran' : 'Faltan'} {soles(Math.abs(diferencia))} respecto al ingreso total ({soles(ingreso)})
+    </p>
   );
 }
 
@@ -190,6 +204,11 @@ export default function Dia() {
             nota: 'Si se puso más sencillo del que quedó ayer.',
           })}
           <Total etiqueta="Sencillo inicial" valor={t.sencilloInicial} />
+
+          <div className="separador" />
+
+          <Total etiqueta="Total ventas + sencillo" valor={t.totalVentasSencillo} destacado />
+          <Cuadre esperado={t.totalVentasSencillo} ingreso={t.ingresoTotal} />
         </section>
 
         <section className="tarjeta" aria-labelledby="t-sencillo">
