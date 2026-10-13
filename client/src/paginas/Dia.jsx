@@ -5,6 +5,9 @@ import { CAMPOS, calcularTotales, redondear } from '../../../shared/calculos.js'
 import { fechaCorta, fechaLarga, hoy, soles } from '../formato.js';
 import Campo from '../componentes/Campo.jsx';
 
+// Precio unitario para calcular el total a partir de la cantidad.
+const PRECIOS = { menu_cantidad: 12, combo_cantidad: 17 };
+
 const vacio = () => Object.fromEntries(CAMPOS.map((c) => [c, '']));
 
 // Los ceros se muestran como campo vacío para que el formulario sea más limpio.
@@ -84,7 +87,14 @@ export default function Dia() {
   }, [sucio]);
 
   const cambiar = (nombre, valor) => {
-    setForm((f) => ({ ...f, [nombre]: valor }));
+    // Al escribir la cantidad, el total se calcula solo con el precio unitario.
+    const precio = PRECIOS[nombre];
+    if (precio) {
+      const total = valor === '' ? '' : aTexto(Number(valor) * precio);
+      setForm((f) => ({ ...f, [nombre]: valor, [nombre.replace('_cantidad', '_total')]: total }));
+    } else {
+      setForm((f) => ({ ...f, [nombre]: valor }));
+    }
     if (estado.tipo) setEstado({ tipo: '', texto: '', campo: null });
   };
 
