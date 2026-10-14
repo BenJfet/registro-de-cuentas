@@ -12,4 +12,10 @@ if (!process.env.DATABASE_URL) {
 export const pool = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: process.env.DATABASE_SSL === 'true' ? { rejectUnauthorized: false } : undefined,
+  // Cerrar conexiones ociosas antes de que Neon suspenda la base (~5 min) y las corte.
+  idleTimeoutMillis: 60_000,
 });
+
+// Si la base corta una conexión ociosa, pg emite 'error' en el pool; sin este
+// manejador Node lo trata como excepción no capturada y tumba el servidor.
+pool.on('error', (err) => console.error('Conexión a la base de datos perdida:', err.message));
