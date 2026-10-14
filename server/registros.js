@@ -4,7 +4,7 @@ import { pool } from './db/pool.js';
 import { requiereSesion } from './auth.js';
 import { CAMPOS, CAMPOS_DINERO, CAMPOS_ENTEROS } from '../shared/calculos.js';
 
-const MAXIMO = 10_000_000;
+export const MAXIMO = 10_000_000;
 
 const dinero = z.coerce.number({ error: 'Monto inválido' }).min(0, 'No se permiten montos negativos').max(MAXIMO).default(0);
 const entero = z.coerce.number({ error: 'Cantidad inválida' }).int('La cantidad debe ser un número entero').min(0).max(MAXIMO).default(0);
@@ -14,8 +14,8 @@ const esquemaRegistro = z.object(Object.fromEntries([
   ...CAMPOS_DINERO.map((c) => [c, dinero]),
 ]));
 
-const esquemaFecha = z.iso.date('Fecha inválida, usa AAAA-MM-DD');
-const esquemaMes = z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/, 'Mes inválido, usa AAAA-MM');
+export const esquemaFecha = z.iso.date('Fecha inválida, usa AAAA-MM-DD');
+export const esquemaMes =z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/, 'Mes inválido, usa AAAA-MM');
 
 const COLUMNAS = CAMPOS.join(', ');
 const VALORES = CAMPOS.map((_, i) => `$${i + 3}`).join(', ');

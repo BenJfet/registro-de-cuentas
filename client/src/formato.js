@@ -17,5 +17,8 @@ export const fechaLarga = (iso) =>
 export const fechaCorta = (iso) =>
   aFecha(iso).toLocaleDateString('es-PE', { weekday: 'short', day: 'numeric', month: 'short' });
 
-export const nombreMes = (mes) =>
+export const diaMes = (iso) =>
+  aFecha(iso).toLocaleDateString('es-PE', { day: 'numeric', month: 'short' });
+
+export const nombreMes =(mes) =>
   aFecha(`${mes}-01`).toLocaleDateString('es-PE', { month: 'long', year: 'numeric' });

@@ -7,6 +7,7 @@ import Acceso from './paginas/Acceso.jsx';
 import Dia from './paginas/Dia.jsx';
 import Historial from './paginas/Historial.jsx';
 import Graficos from './paginas/Graficos.jsx';
+import Gastos from './paginas/Gastos.jsx';
 import './estilos.css';
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Route index element={<Dia />} />
         <Route path="historial" element={<Historial />} />
         <Route path="graficos" element={<Graficos />} />
+        <Route path="gastos" element={<Gastos />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

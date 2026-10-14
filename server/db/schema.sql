@@ -53,3 +53,17 @@ CREATE TABLE IF NOT EXISTS registros_diarios (
 
   UNIQUE (usuario_id, fecha)
 );
+
+-- Pagos y gastos del restaurante (personal, servicios, varios).
+CREATE TABLE IF NOT EXISTS gastos (
+  id          SERIAL PRIMARY KEY,
+  usuario_id  INTEGER       NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+  fecha       DATE          NOT NULL,
+  categoria   TEXT          NOT NULL
+                CHECK (categoria IN ('personal', 'ruc', 'agua', 'luz', 'gas', 'varios')),
+  descripcion TEXT          NOT NULL DEFAULT '' CHECK (length(descripcion) <= 120),
+  monto       NUMERIC(12,2) NOT NULL CHECK (monto > 0),
+  creado_en   TIMESTAMPTZ   NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS gastos_usuario_fecha ON gastos (usuario_id, fecha);

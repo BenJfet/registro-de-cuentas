@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import { fileURLToPath } from 'node:url';
 import { rutasAuth } from './auth.js';
 import { rutasRegistros } from './registros.js';
+import { rutasGastos } from './gastos.js';
 import { pool } from './db/pool.js';
 
 if (!process.env.JWT_SECRET) {
@@ -26,6 +27,7 @@ app.get('/api/salud', async (req, res) => {
 
 app.use('/api/auth', rutasAuth);
 app.use('/api/registros', rutasRegistros);
+app.use('/api/gastos', rutasGastos);
 app.use('/api', (req, res) => res.status(404).json({ error: 'Ruta no encontrada' }));
 
 // En producción Express también sirve la web compilada (npm run build).

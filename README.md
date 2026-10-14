@@ -19,6 +19,7 @@ Aplicación web para registrar las ventas diarias y cuadrar la caja de un negoci
 - **Historial mensual** con días registrados, ventas del mes, ingreso total y promedio por día. Cualquier día se puede abrir y corregir.
 - **Exportación a Excel y PDF** del mes, y una copia de seguridad de todo el historial en Excel. El Excel trae fórmulas de totales y formato de soles; el PDF es un reporte listo para imprimir.
 - **Gráficos de ventas por semana y por mes** (últimos 12 periodos), con detalle al tocar cada barra y una vista en tabla accesible. Los totales se agregan en PostgreSQL con `generate_series`, así que los periodos sin ventas aparecen en 0.
+- **Gastos y pagos**: pago de cada trabajador por separado, servicios (RUC/SUNAT, agua, luz, gas) y gastos varios. Muestra los totales del mes, cuánto se pagó a cada trabajador y lo que queda líquido (ventas del mes − gastos).
 - **Diseño adaptable** al celular, con los colores del restaurante (crema, guinda y blanco).
 - **Instalable como app (PWA)** en Android e iPhone: ícono en la pantalla de inicio y pantalla completa, sin pasar por las tiendas de apps.
 
@@ -92,7 +93,7 @@ La app está preparada para **Render** (servidor) y **Neon** (PostgreSQL), con l
 
 ## API
 
-Todas las rutas de `/api/registros` requieren sesión.
+Todas las rutas de `/api/registros` y `/api/gastos` requieren sesión.
 
 | Método | Ruta | Descripción |
 |---|---|---|
@@ -106,18 +107,22 @@ Todas las rutas de `/api/registros` requieren sesión.
 | `GET` | `/api/registros/:fecha` | Registro de un día y datos del día anterior para autocompletar |
 | `PUT` | `/api/registros/:fecha` | Crear o actualizar el registro del día |
 | `DELETE` | `/api/registros/:fecha` | Eliminar el registro del día |
+| `GET` | `/api/gastos?mes=AAAA-MM` | Gastos de un mes, ventas del mes y nombres de trabajadores |
+| `POST` | `/api/gastos` | Anotar un gasto (personal, RUC/SUNAT, agua, luz, gas o varios) |
+| `DELETE` | `/api/gastos/:id` | Eliminar un gasto |
 
 ## Estructura
 
 ```
 ├── client/            Frontend React (Vite)
 │   └── src/
-│       ├── paginas/       Acceso, Día, Historial, Gráficos
+│       ├── paginas/       Acceso, Día, Historial, Gráficos, Gastos
 │       ├── componentes/   Layout, Campo, GraficoBarras
 │       └── exportar.js    Excel y PDF
 ├── server/            API Express
 │   ├── auth.js            Registro, login y sesión
 │   ├── registros.js       CRUD de registros diarios
+│   ├── gastos.js          Pagos de personal, servicios y gastos varios
 │   └── db/                Conexión, esquema SQL y migración
 └── shared/            Lógica de cálculo compartida + pruebas
 ```
